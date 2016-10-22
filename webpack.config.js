@@ -5,17 +5,17 @@ var path = require('path');
 module.exports = {
     context: path.join(__dirname, "src"),
     devtool: debug ? "inline-sourcemap" : null,
-    entry: "./js/client.js",
+    entry: [
+    'webpack-dev-server/client?http://localhost:8999', // WebpackDevServer host and port
+    'webpack/hot/only-dev-server', // "only" prevents reload on syntax errors
+    './js/client.js' // Your appʼs entry point
+    ],
     module: {
         loaders: [
             {
                 test: /\.jsx?$/,
-                exclude: /(node_modules|bower_components)/,
-                loader: 'babel-loader',
-                query: {
-                    presets: ['react', 'es2015'], //, 'stage-0'],
-                    plugins: ['react-html-attrs', 'transform-class-properties', 'transform-decorators-legacy'],
-                }
+                include: path.join(__dirname, 'src'),
+                loaders: ['react-hot', 'babel'],
             }
         ]
     },
@@ -23,7 +23,9 @@ module.exports = {
         path: path.join(__dirname, "src"),
         filename: "client.min.js"
     },
-    plugins: debug ? [] : [
+    plugins: debug ? [
+        new webpack.HotModuleReplacementPlugin()
+    ] : [
         new webpack.optimize.DedupePlugin(),
         new webpack.optimize.OccurenceOrderPlugin(),
         new webpack.optimize.UglifyJsPlugin({ mangle: false, sourcemap: false }),
