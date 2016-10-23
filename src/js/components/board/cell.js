@@ -16,21 +16,31 @@ export class Cell extends React.Component {
     // };
 // {this.props.value} {this.props.row} {this.props.column}
     
-    constructor() {
-        super()
-        console.log(this.props)
+    clickMe(row, column) {
+        if (!this.props.clicked && 
+            this.isNeighbour(row, column, this.props.row, this.props.column)) {
+            this.stopListening()
+            this.click()
+            console.log(this.props.clicked + " " + row + " " + column + " " + this.props.row + " " + this.props.column)
+            // this.click()
+        } 
+    }
+
+    stopListening() {
+        // this.props.eventEmitter.g
+        this.props.eventEmitter.removeListener('neighbour', this.clickMeBound);
+        console.log("stopped listening ", this.props.row, this.props.column)
+        console.log("stopped listening ", this.props.eventEmitter.listenerCount('neighbour'))
     }
 
     componentWillMount() {
-        this.props.eventEmitter.on('neighbour', 
-            (row, column) => {
-                if (!this.props.clicked && 
-                    this.isNeighbour(row, column, this.props.row, this.props.column)) {
-                    // this.click()
-                    console.log(this.props.clicked + " " + row + " " + column + " " + this.props.row + " " + this.props.column)
-                    // this.click()
-                }
-            })
+        this.clickMeBound = this.clickMe.bind(this)
+        this.props.eventEmitter.on('neighbour', this.clickMeBound)
+    }
+
+    componentWillUnmount() {
+        this.stopListening();
+        this.eventEmitter.removeAllListeners()
     }
 
     isNeighbour(neighbourRow, neighbourColumn, yourRow, yourColumn) {
@@ -50,7 +60,7 @@ export class Cell extends React.Component {
     }
 
     click() {
-        console.log("clicked cell " + this.props.row + ", " + this.props.column);
+        console.log("clicked cell is ", this.props.row, this.props.column);
         this.props.dispatch(clickCell(this.props.row, this.props.column));
         if (this.props.value === 0) {
             for (i = -1; i <= 1; i++) {
@@ -67,7 +77,7 @@ export class Cell extends React.Component {
     render() {
         // console.log("Amanda " + this.props.clicked);
         return (
-                <td>{this.props.key}<button disabled={this.props.clicked} onClick={this.click.bind(this)}>{this.props.value} {this.props.clicked + ""}</button></td>
+                <td><button disabled={this.props.clicked} onClick={this.click.bind(this)}>{this.props.value} {this.props.clicked + ""}</button></td>
             );
     }
 }
