@@ -7,9 +7,9 @@ import { clickCell } from "../../actions/boardActions"
 import { fetchBoard } from "../../actions/boardActions"
 
 // need to add connect so it can dispatch the click cell action
-@connect((store) => { return {
-        board: store.board.board,
-    };})
+// @connect((store) => { return {
+//         //board: store.board.board,
+//     };})
 export class Cell extends React.Component {
     // const divStyle = {
     //     border: "1px solid #000000",
@@ -81,3 +81,6 @@ export class Cell extends React.Component {
             );
     }
 }
+
+const ConnectedCell = connect()(Cell)
+export default ConnectedCell

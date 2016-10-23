@@ -1,7 +1,7 @@
 import { combineReducers } from "redux"
 
-import board from "./boardReducer"
+import boardReducer from "./boardReducer"
 
 export default combineReducers({
-    board,
+    boardReducer,
 })

@@ -5,11 +5,11 @@ import { fetchBoard } from "../actions/boardActions"
 
 import { Header } from "./header"
 
-import { Board } from "./board/board"
+import Board from "./board/board"
 
 @connect((store) => {
     return {
-        board: store.board.board,
+        board: store.boardReducer.board,
     };
 })
 export default class Layout extends React.Component {
