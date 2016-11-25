@@ -1,6 +1,6 @@
 import React from "react"
-import EventEmitter from "events"
-import Cell from "./cell"
+
+import { Cell } from "./cell"
 import { connect } from "react-redux"
 
 // if you export class Blah, you import {Blah} from file
@@ -8,16 +8,22 @@ import { connect } from "react-redux"
 //https://codereviewvideos.com/blog/warning-react-createelement/
 
 export class Board extends React.Component {
-    constructor() {
-        super()
-        this.eventEmitter = new EventEmitter()
-    }
-
+    
     render() {
-        // console.log(this.props)
+        console.log(this.props)
         const { board } = this.props;
         const cells = board.map((row, i) => {
-            var aRow = row.map((cell, j) => (<Cell key={i+"_"+j} clicked={cell.clicked} value={cell.value} row={i} column={j} eventEmitter={this.eventEmitter} />))
+            var aRow = row.map((cell, j) => {
+                return (
+                    <Cell 
+                        key={i+"_"+j} 
+                        clicked={cell.clicked} 
+                        value={cell.value} 
+                        row={i} 
+                        column={j}
+                        clickCell={this.props.clickCell.bind(this)}
+                    />)
+            })
             return (<tr key={"row"+i} >{aRow}</tr>);
         })
         return ( 
@@ -27,12 +33,3 @@ export class Board extends React.Component {
         )
     }
 }
-
-function mapStateToProps(store) {
-    return {
-        board: store.boardReducer.board,
-    }
-}
-
-const ConnectedBoard = connect(mapStateToProps)(Board)
-export default ConnectedBoard

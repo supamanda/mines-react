@@ -59,13 +59,12 @@ function newBoard() {
 }
 
 function updateBoard(board, row, column) {
-    // let others = getNeighbours(board,row,column) 
-    let others = []
+    let others = getNeighbours(board,row,column) 
     let updatedBoard = board.map((aRow, i) => {
         return aRow.map((cell, j) => {
             let newAttributes = {}
             // console.log("finding", i, j, (_.find(others, new Point(i,j)) !== undefined ))
-            if (i === row && j === column) { // || _.find(others, new Point(i,j)) !== undefined) {
+            if (i === row && j === column || _.find(others, new Point(i,j)) !== undefined) {
                 newAttributes.clicked = true;
             } 
             return Object.assign({}, cell, newAttributes);
@@ -86,7 +85,7 @@ export class Point {
 }
 
 function neighbours(board, row, column) {
-    //if (board[row][column].value !== "0") return []
+    // if (board[row][column].value !== "0") return []
     
     let rows = [-1,0,1]
     let cols = [-1,0,1]

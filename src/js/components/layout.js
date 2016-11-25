@@ -1,11 +1,11 @@
 import React from "react"
 import { connect } from "react-redux"
 
-import { fetchBoard } from "../actions/boardActions"
+import { fetchBoard, clickCell } from "../actions/boardActions"
 
 import { Header } from "./header"
 
-import Board from "./board/board"
+import { Board } from "./board/board"
 
 @connect((store) => {
     return {
@@ -36,8 +36,9 @@ export default class Layout extends React.Component {
 
     render() {
         const { board } = this.props;
-        console.log("rendering the board ", board)
+        console.log("rendering the board ", board, this.clickCell)
         const amanda = "Amanda the board has changed"
+        
         return ( 
             <div>
                 <Header changeTitle={this.changeTitle.bind(this)} title={this.state.title} />

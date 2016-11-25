@@ -14,24 +14,13 @@ const mockStore = configureStore(middleware)
 function setup() {
     const props = {
         board: [[new MineCell("0", false), new MineCell("0", false)],
-                [new MineCell("0", false), new MineCell("0", false)]]
+                [new MineCell("0", false), new MineCell("0", false)]],
+        clickCell: jasmine.createSpy()
     }
-    const store = mockStore({
-        boardReducer: {
-            board: props.board
-        }
-    })
-    console.log(store.getState().boardReducer.board)
-    // const enzymeWrapper = shallow(<Board {...props} />)
-    const enzymeWrapper = mount(
-        <Provider store={store}>
-           <ConnectedBoard  />
-        </Provider>
-    )
-
+    const enzymeWrapper = shallow(<Board {...props} />)
+    
     return {
         props,
-        store,
         enzymeWrapper
     }
 }
