@@ -1,16 +1,11 @@
+import { MineCell } from '../shared/mineCell'
+
 export function fetchBoard() {
     return {
         type: "FETCH_NEW_BOARD_FULFILLED",
         payload: {
             board: createNewBoard()
         }
-    }
-}
-
-export class MineCell {
-    constructor(value, clicked) {
-        this.value = value;
-        this.clicked = clicked;
     }
 }
 

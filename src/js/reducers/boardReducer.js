@@ -1,9 +1,17 @@
-import { MineCell } from '../actions/boardActions'
+import { Board } from './board'
+import { Point } from './point'
 import _ from 'lodash'
+
+const status = {
+  PLAYING: 'playing',
+  LOST: 'lost',
+  WON: 'won'
+}
 
 // this is a model of the store variables
 export default function reducer(state={
-    board: newBoard(),
+    board: new Board(5),
+    status: status.PLAYING
 }, action) {
 
     switch (action.type) {
@@ -14,7 +22,8 @@ export default function reducer(state={
             let obj = Object.assign({}, 
                 state, 
                 {
-                    board:newBoard()
+                    board: new Board(5),
+                    status: status.PLAYING
                 }
             );
             return obj;
@@ -26,17 +35,20 @@ export default function reducer(state={
             // obj.board[action.payload.row][action.payload.column].clicked=true;
             // console.log(obj.board[action.payload.row][action.payload.column].clicked);
             // return obj;
-            if (action.payload.row < 0 || action.payload.column < 0 ||
-                action.payload.row > state.board.length || action.payload.column > state.board.length) 
-            {
-                // skip if out of bounds
-                return state
+            // if (action.payload.row < 0 || action.payload.column < 0 ||
+            //     action.payload.row > state.board.length || action.payload.column > state.board.length) 
+            // {
+            //     // skip if out of bounds
+            //     return state
+            // }
+            let location = new Point(action.payload.row, action.payload.column)
+            state.board.clickCell(location)
+            let newData = {
+                board: state.board.duplicate()
             }
+            if (state.board.getCell(location).isMine()) newData.status = status.LOST 
             let obj = Object.assign({}, 
-                state,
-                {
-                    board: updateBoard(state.board, action.payload.row, action.payload.column)
-                }
+                state, newData
             );
             return obj;
         }
@@ -46,6 +58,7 @@ export default function reducer(state={
     return state
 }
 
+/*
 function copyArray(array) {
     return array.map(x => x)
 }
@@ -72,39 +85,6 @@ function updateBoard(board, row, column) {
     })
     return updatedBoard;
 }
-
-export class Point {
-    constructor(row, col) {
-        this.row = row
-        this.col = col
-    }
-
-    equals(other) {
-        this.row === other.row && this.col === other.col
-    }
-}
-
-function neighbours(board, row, column) {
-    // if (board[row][column].value !== "0") return []
-    
-    let rows = [-1,0,1]
-    let cols = [-1,0,1]
-    console.log(row, column, board.length)
-    let myNeighbours = rows.map(r => cols.map(c => new Point(row+r,column+c))
-    .filter(x => {
-        // console.log(x, x.row, row, x.col, column, (x.row === row && x.col === column))
-        return x.row >= 0 && x.col >= 0 && !(x.row == row && x.col == column)
-            && x.row < board.length && x.col < board.length
-    }))
-    // let union = _.union(myNeighbours, found)
-    // let diff = _.difference(myNeighbours, found)
-
-    return _.flatten(myNeighbours);
-}
-
-window.neighbours = neighbours
-window.newBoard = newBoard
-window.getNeighbours = getNeighbours
 
 
 function getNeighbours(board, row, column) {
@@ -148,10 +128,4 @@ function union(one, two) {
         _.isEqual)
 }
 
-
-function isNeighbour(neighbourRow, neighbourColumn, yourRow, yourColumn) {
-    let rowDist = Math.abs(neighbourRow - yourRow)
-    let colDist = Math.abs(neighbourColumn - yourColumn)
-
-    return (rowDist === 1 && colDist <= 1) || (rowDist === 0 && colDist === 1)
-}
+*/

@@ -3,21 +3,20 @@ import { shallow, mount } from 'enzyme'
 import thunk from 'redux-thunk'
 import configureStore from 'redux-mock-store';
 
-import ConnectedBoard, { Board } from './board'
+import ConnectedBoard, { Board as BoardComponent } from './board'
 
 import { Provider } from "react-redux"
-import { MineCell } from '../../actions/boardActions'
+import { Board } from '../../reducers/board'
 
 const middleware = [thunk]
 const mockStore = configureStore(middleware)
 
 function setup() {
     const props = {
-        board: [[new MineCell("0", false), new MineCell("0", false)],
-                [new MineCell("0", false), new MineCell("0", false)]],
+        board: new Board(2),
         clickCell: jasmine.createSpy()
     }
-    const enzymeWrapper = shallow(<Board {...props} />)
+    const enzymeWrapper = shallow(<BoardComponent {...props} />)
     
     return {
         props,

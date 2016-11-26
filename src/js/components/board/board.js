@@ -12,15 +12,15 @@ export class Board extends React.Component {
     render() {
         console.log(this.props)
         const { board } = this.props;
-        const cells = board.map((row, i) => {
-            var aRow = row.map((cell, j) => {
+        const cells = board.board.map((row, i) => {
+            var aRow = row.map((cell) => {
                 return (
                     <Cell 
-                        key={i+"_"+j} 
+                        key={`${cell.location.row}_${cell.location.col}`} 
                         clicked={cell.clicked} 
                         value={cell.value} 
-                        row={i} 
-                        column={j}
+                        row={cell.location.row} 
+                        column={cell.location.col}
                         clickCell={this.props.clickCell.bind(this)}
                     />)
             })

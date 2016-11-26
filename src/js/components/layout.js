@@ -10,19 +10,10 @@ import { Board } from "./board/board"
 @connect((store) => {
     return {
         board: store.boardReducer.board,
+        status: store.boardReducer.status
     };
 })
 export default class Layout extends React.Component {
-    constructor() {
-    super();
-    this.state = {
-      title: "Welcome",
-    };
-  }
-
-  changeTitle(title) {
-    this.setState({title});
-  }
 
     newGame() {
         console.log("fetching a new board")
@@ -35,13 +26,13 @@ export default class Layout extends React.Component {
     }
 
     render() {
-        const { board } = this.props;
+        const { board, status } = this.props;
         console.log("rendering the board ", board, this.clickCell)
         const amanda = "Amanda the board has changed"
         
         return ( 
             <div>
-                <Header changeTitle={this.changeTitle.bind(this)} title={this.state.title} />
+                <Header title={status} />
                 <Board board={board} clickCell={this.clickCell.bind(this)} />
                 <button onClick={this.newGame.bind(this)}>New game</button>
                 
